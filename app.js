@@ -33,7 +33,11 @@ function decrement() {
 
 function left() {
   console.log('Moving the memory pointer left one address')
-  pointer --
+  if(pointer > 0) {
+    pointer --
+  } else {
+    throw { error: 'Already at the first position in memory' }
+  }
 }
 
 function right() {
@@ -57,7 +61,7 @@ function addMoreMemory() {
   memory.push(0)
 }
 
-const input = '+++>++>+<<--'
+const input = '+++>++>+<<--<<<'
 
 let output = fuck_brains(input)
 console.log(output)
