@@ -54,7 +54,7 @@ function open_loop() {
 }
 
 function close_loop() {
-  console.log('Cloding an open loop')
+  console.log('Closing an open loop')
 }
 
 function addMoreMemory() {
