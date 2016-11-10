@@ -1,26 +1,63 @@
+const fs = require('fs')
+
 let memory = [0]
 let pointer = 0
 
+// Input is the program, a string
 function fuckBrains (input) {
   let memory = [0]
-  const chars = strip(input)
-  const tree = parse(chars)
 
-  console.log({ memory: memory, tree: tree })
+  const program = strip(input)
+  const charList = program.split('')
+  const tree = parse(charList)
+
+  console.log({ memory: memory, program: tree })
 
   return memory
 }
 
+// Returns the program with all invalid characters removed
 function strip (input) {
   const stripCharacters = /[^\[\]<>+-]/g
 
   return input
     .replace(stripCharacters, '')
-    .split('')
 }
 
+// Reads and tokenises the input program, returns a tree
+// Errors if there are syntax problems
 function parse (input) {
-  return {}
+  let result = []
+
+  input.forEach(char => {
+    switch (char) {
+      case '+':
+        result.push(increment)
+        break
+
+      case '-':
+        result.push(decrement)
+        break
+
+      case '<':
+        result.push(left)
+        break
+
+      case '>':
+        result.push(right)
+        break
+
+      case '[':
+        result.push(openLoop)
+        break
+
+      case ']':
+        result.push(closeLoop)
+        break
+    }
+  })
+
+  return result
 }
 
 function increment () {
@@ -63,6 +100,10 @@ function addMoreMemory () {
   memory.push(0)
 }
 
-const input = '[@$%@$%*@#$%][wer]pdfs-d9f0s9dfio23j5492805979234"sd"f\'sd\'fS"DF'
+const input = fs.readFile('./input/program.txt', 'utf8', (err, data) => {
+  if (err) {
+    console.log(err)
+  }
 
-fuckBrains(input)
+  fuckBrains(data)
+})
