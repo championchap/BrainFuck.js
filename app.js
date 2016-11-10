@@ -16,11 +16,10 @@ function fuckBrains (input) {
   const charList = chars.split('')
   const program = parse(charList)
 
-  if (program.length !== 0) {
-    run(program)
-  } else {
-    return result()
-  }
+  // console.log({ program: program })
+
+  run(program)
+  result()
 }
 
 function result () {
@@ -30,19 +29,20 @@ function result () {
 function run (program) {
   let node = program.shift()
 
-  node()
+  if (typeof node === 'function') {
+    node()
+  } else {
+    run(node)
+  }
 
   if (program.length !== 0) {
     run(program)
-  } else {
-    result()
-    return
   }
 }
 
 // Returns the program with all invalid characters removed
 function strip (input) {
-  const stripCharacters = /[^\[\]<>+-,.]/g
+  const stripCharacters = /[^\[\]<>+,-.]/g
 
   return input
     .replace(stripCharacters, '')
@@ -54,7 +54,9 @@ function parse (input) {
   let result = []
 
   // I think this should be a regular for loop
-  input.forEach(char => {
+  for (let i = 0; i < input.length; i++) {
+    let char = input[i]
+
     switch (char) {
       // Plus one at current address
       case '+':
@@ -88,15 +90,31 @@ function parse (input) {
 
       // Open loop
       case '[':
+        let section = input.slice(i + 1, getMatchingIndex(input, i))
+        result.push(parse(section))
         break
 
       // Close loop
       case ']':
         break
     }
+  }
+
+  input.forEach(char => {
+
   })
 
   return result
+}
+
+function getMatchingIndex (input, index) {
+  for (let i = index; i < input.length; i++) {
+    if (input[i] === ']') {
+      return i
+    }
+  }
+
+  throw Error('Found no matching bracket for loop at position ' + index)
 }
 
 function output () {
@@ -129,12 +147,6 @@ function right () {
   if (!memory[pointer]) {
     addMoreMemory()
   }
-}
-
-function openLoop () {
-}
-
-function closeLoop () {
 }
 
 // Brainfuck Memory Space is 30000 addresses long.

@@ -5,8 +5,7 @@ Learning to write a BrainFuck interpreter in JavaScript.
 
 ## Still To Do
 
-  + Loops don't work.
-  + Nested Loops definitely don't work.
+  + Nested Loops don't work.
   + Taking Input from the User doesn't work.
 
 
