@@ -1,0 +1,25 @@
+{
+  "name": "brainfuck.js",
+  "version": "0.0.1",
+  "description": "A BrainFuck interpereter",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/championchap/BrainFuck.js.git"
+  },
+  "keywords": [
+    "BrainFuck",
+    "Parse",
+    "Run",
+    "Interpeterer"
+  ],
+  "author": "Erik Watson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/championchap/BrainFuck.js/issues"
+  },
+  "homepage": "https://github.com/championchap/BrainFuck.js#readme"
+}
