@@ -16,7 +16,7 @@ function fuckBrains (input) {
   const charList = chars.split('')
   const program = parse(charList)
 
-  // console.log({ program: program })
+  console.log({ program: program })
 
   run(program)
   result()
@@ -53,7 +53,6 @@ function strip (input) {
 function parse (input) {
   let result = []
 
-  // I think this should be a regular for loop
   for (let i = 0; i < input.length; i++) {
     let char = input[i]
 
@@ -91,6 +90,8 @@ function parse (input) {
       // Open loop
       case '[':
         let section = input.slice(i + 1, getMatchingIndex(input, i))
+        console.log({ parsed_section: parse(section) })
+
         result.push(parse(section))
         break
 
@@ -100,18 +101,29 @@ function parse (input) {
     }
   }
 
-  input.forEach(char => {
-
-  })
-
   return result
 }
 
 function getMatchingIndex (input, index) {
-  for (let i = index; i < input.length; i++) {
-    if (input[i] === ']') {
-      return i
+  let count = 0
+
+  for (let i = index + 1; i < input.length; i++) {
+    switch(input[i]) {
+      case '[':
+        count += 1
+        break
+
+      case ']':
+        if (count === 0) {
+          return i
+        } else {
+          count -= 1
+        }
+        break
     }
+    /*if (input[i] === ']') {
+      return i
+    }*/
   }
 
   throw Error('Found no matching bracket for loop at position ' + index)
