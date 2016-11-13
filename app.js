@@ -1,10 +1,3 @@
-// Idea for handling loops
-//
-// We could find the matching bracket and send
-// all of the code between them into the parse function.
-// This should let us build nested stacks of functions.
-// Then we just need some logic for how they work.
-
 const fs = require('fs')
 
 let memory = [0]
@@ -15,8 +8,6 @@ function fuckBrains (input) {
   const chars = strip(input)
   const charList = chars.split('')
   const program = parse(charList)
-
-  console.log({ program: program })
 
   run(program)
   result()
@@ -32,12 +23,22 @@ function run (program) {
   if (typeof node === 'function') {
     node()
   } else {
-    run(node)
+    let currentPointer = pointer
+    let currentProgram = clone(node)
+
+    while (memory[currentPointer] > 0) {
+      run(currentProgram)
+      currentProgram = clone(node)
+    }
   }
 
   if (program.length !== 0) {
     run(program)
   }
+}
+
+function clone (array) {
+  return array.slice(0)
 }
 
 // Returns the program with all invalid characters removed
@@ -88,15 +89,14 @@ function parse (input) {
         break
 
       // Open loop
+      // This bit takes care of closing the loops too
       case '[':
-        let section = input.slice(i + 1, getMatchingIndex(input, i))
-        console.log({ parsed_section: parse(section) })
+        let closingIndex = getMatchingIndex(input, i)
+        let section = input.slice(i + 1, closingIndex)
 
         result.push(parse(section))
-        break
+        i = closingIndex
 
-      // Close loop
-      case ']':
         break
     }
   }
@@ -108,7 +108,7 @@ function getMatchingIndex (input, index) {
   let count = 0
 
   for (let i = index + 1; i < input.length; i++) {
-    switch(input[i]) {
+    switch (input[i]) {
       case '[':
         count += 1
         break
@@ -121,9 +121,6 @@ function getMatchingIndex (input, index) {
         }
         break
     }
-    /*if (input[i] === ']') {
-      return i
-    }*/
   }
 
   throw Error('Found no matching bracket for loop at position ' + index)
@@ -134,7 +131,7 @@ function output () {
 }
 
 function save () {
-
+  // TODO
 }
 
 function increment () {
@@ -172,7 +169,7 @@ function addMoreMemory () {
   }
 }
 
-fs.readFile('./input/program.bf', 'utf8', (err, data) => {
+fs.readFile('./input/hello_world.bf', 'utf8', (err, data) => {
   if (err) {
     console.log(err)
   }
